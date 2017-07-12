@@ -46,6 +46,15 @@ You will need git commands in order to handle some repositories and install some
 .. code-block:: bash
 
   sudo apt-get install git
+  
+GIS PPA
+~~~~~~~~~~~~~~
+
+The below is needed to get the latest version of GDAL
+
+.. code-block:: bash
+  sudo add-apt-repository ppa:ubuntugis/ppa
+  sudo apt-get update
 
 PostgreSQL
 ----------
