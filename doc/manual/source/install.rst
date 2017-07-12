@@ -38,15 +38,6 @@ Although we try to maintain packaged versions of almost every part of the stack,
 
   sudo apt-get install autoconf binutils-doc bison build-essential flex
 
-You will also need to install GCC 4.9 in order to build some Node modules later. You can install it doing this:
-
-.. code-block:: bash
-
-  sudo add-apt-repository ppa:cartodb/gcc && sudo apt-get update
-  sudo apt-get install gcc-4.9 g++-4.9
-  export CC=/usr/bin/gcc-4.9
-  export CXX=/usr/bin/g++-4.9
-
 GIT
 ~~~
 
@@ -58,13 +49,6 @@ You will need git commands in order to handle some repositories and install some
 
 PostgreSQL
 ----------
-
-* Add PPA repository
-
-  .. code-block:: bash
-
-    sudo add-apt-repository ppa:cartodb/postgresql-9.5 && sudo apt-get update
-
 
 * Install client packages
 
@@ -83,9 +67,6 @@ PostgreSQL
                          postgresql-contrib-9.5 \
                          postgresql-server-dev-9.5 \
                          postgresql-plpython-9.5
-
-
-
 
 PostgreSQL access authorization is managed through pg_hba.conf configuration file, which is normally in /etc/postgresql/9.5/main/pg_hba.conf. Here it's defined how the users created in postgresql cluster can access the server. This involves several aspects like type of authentication (md5, no password, etc..) or source IP of the connection. In order to simplify the process of the installation we are going to allow connections with postgres user from localhost without authentication. Of course this can be configured in a different way at any moment but changes here should imply changes in database access configuration of CartoDB apps.
 
@@ -124,17 +105,11 @@ For these changes to take effect, you'll need to restart postgres:
 GIS dependencies
 ----------------
 
-* Add GIS PPA
-
-  .. code-block:: bash
-
-    sudo add-apt-repository ppa:cartodb/gis && sudo apt-get update
-
 * Install Proj
 
   .. code-block:: bash
 
-    sudo apt-get install proj proj-bin proj-data libproj-dev
+    sudo apt-get install proj-bin proj-data libproj-dev
 
 * Install JSON
 
@@ -154,6 +129,8 @@ GIS dependencies
 
     sudo apt-get install gdal-bin libgdal1-dev libgdal-dev
     sudo apt-get install gdal2.1-static-bin
+    
+##### Could be a problem that don't have gdal2.1-static-bin - check later
 
 
 PostGIS
@@ -164,7 +141,7 @@ PostGIS
   .. code-block:: bash
 
     sudo apt-get install libxml2-dev
-    sudo apt-get install liblwgeom-2.2.2 postgis postgresql-9.5-postgis-2.2 postgresql-9.5-postgis-scripts
+    sudo apt-get install liblwgeom-2.2-5 postgis postgresql-9.5-postgis-2.2 postgresql-9.5-postgis-scripts
 
 * Initialize template postgis database. We create a template database in postgresql that will contain the postgis extension. This way, every time CartoDB creates a new user database it just clones this template database
 
@@ -195,12 +172,6 @@ Redis
 
 Redis 3+ is needed.
 
-* Add redis PPA
-
-  .. code-block:: bash
-
-    sudo add-apt-repository ppa:cartodb/redis && sudo apt-get update
-
 * Install redis
 
   .. code-block:: bash
@@ -218,23 +189,19 @@ NodeJS
 
 NodeJS is required by different parts of the stack. The more significant are the Maps and SQL APIs. It's also used to install and execute some dependencies of the editor.
 
-* Add the PPA
-
-  .. code-block:: bash
-
-    sudo add-apt-repository ppa:cartodb/nodejs && sudo apt-get update
 
 * Install NodeJS
-
   .. code-block:: bash
-
-    sudo apt-get install nodejs
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+    nvm install 6.9.2
 
   Note this should install both NodeJS 6.9.2 and npm 3.10.9. You can verify the installation went as expected with:
 
   .. code-block:: bash
 
-    nodejs -v
+    node -v
     npm -v
 
 If npm version is wrong you should update it:
@@ -343,18 +310,22 @@ Ruby
 
     export PATH=/opt/rubies/ruby-2.2.3/bin:$PATH
 
+* Note that the above has to be added to BOTH your user and the root user .bashrc files.
+
 * Install bundler. Bundler is an app used to manage ruby dependencies. It is needed by CartoDB's editor
 
   .. code-block:: bash
 
-    sudo gem install bundler
+    sudo su
+    gem install bundler
 
 
 * Install compass. It will be needed later on by CartoDB's editor
 
   .. code-block:: bash
 
-    sudo gem install compass
+    sudo su
+    gem install compass
 
 
 Editor
@@ -388,6 +359,7 @@ Editor
     sudo apt-get install imagemagick unp zip
     RAILS_ENV=development bundle install
     npm install
+    sudo apt-get install libgdal-dev
     sudo pip install --no-use-wheel -r python_requirements.txt
 
 .. warning::
@@ -419,6 +391,11 @@ Editor
 
     bundle install
 
+* Install grunt-cli"
+
+  .. code-block:: bash
+  
+  npm install -g grunt-cli
 
 * Precompile assets. Note that the last parameter is the environment used to run the application. It must be the same used in the Maps and SQL APIs
 
@@ -457,4 +434,4 @@ Editor
 
   .. code-block:: bash
 
-    RAILS_ENV=development bundle exec ./script/resque
+    RAILS_ENV=development bundle exec ./script/resque
