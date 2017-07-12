@@ -53,6 +53,7 @@ GIS PPA
 The below is needed to get the latest version of GDAL
 
 .. code-block:: bash
+
   sudo add-apt-repository ppa:ubuntugis/ppa
   sudo apt-get update
 
